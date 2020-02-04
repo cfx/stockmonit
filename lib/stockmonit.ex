@@ -31,8 +31,7 @@ defmodule Stockmonit do
         IO.read(body, :all)
 
       {:error, _} ->
-        IO.puts("Can't load #{path} file")
-        System.halt(2)
+        halt("Can't load #{path} file")
     end
   end
 
@@ -42,18 +41,22 @@ defmodule Stockmonit do
         data
 
       {:error, _} ->
-        IO.puts("Invalid #{@config_filename}")
-        System.halt(2)
+        halt("Invalid #{@config_filename}")
     end
   end
 
-  defp monitor_stocks(%{"stocks" => stocks}) do
+  defp monitor_stocks(%{"stocks" => stocks, "config" => config}) do
     for stock <- stocks do
-      Stockmonit.Stock.monitor(stock)
+      Stockmonit.Api.monitor(stock, config)
     end
   end
 
   defp config_path() do
     System.user_home() <> "/#{@config_filename}"
+  end
+
+  defp halt(msg) do
+    IO.puts(msg)
+    System.halt(2)
   end
 end
