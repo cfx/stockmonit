@@ -1,23 +1,39 @@
 defmodule Stockmonit.StockWorker do
   use GenServer
+  alias Ratatouille.Runtime.{Command, Subscription}
   alias Stockmonit.Api.Finnhub
 
   def start_link(stock, api_config) do
     GenServer.start_link(__MODULE__, {stock, api_config})
   end
 
+  def get() do
+    GenServer.call(__MODULE__, :get)
+  end
+
   def init(config) do
-    fetch_stock()
+    fetch_stock(Enum.random(0..9) * 1000)
     {:ok, config}
   end
 
-  def handle_info(:fetch, {stock, api_config = %{"api_key" => api_key}}) do
-    #    fetch_stock()
-    IO.inspect(Finnhub.fetch(stock, api_key))
+  def handle_info(:fetch, {stock, api_config}) do
+    %{"name" => key, "symbol" => symbol} = stock
+    %{"api_key" => api_key, "interval" => interval} = api_config
+
+    case Finnhub.fetch(symbol, api_key) do
+      {:ok, data} ->
+        Stockmonit.Server.put_data(key, data)
+    end
+
+    fetch_stock(interval * 1000)
     {:noreply, {stock, api_config}}
   end
 
-  defp fetch_stock() do
-    Process.send_after(self(), :fetch, 1000)
+  def handle_call(:get, _from, config) do
+    {:replay, config, config}
+  end
+
+  defp fetch_stock(t) do
+    Process.send_after(self(), :fetch, t)
   end
 end
