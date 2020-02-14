@@ -1,7 +1,6 @@
 defmodule Stockmonit.StockWorker do
   use GenServer
-  alias Ratatouille.Runtime.{Command, Subscription}
-  alias Stockmonit.Api.Finnhub
+  alias Stockmonit.Api.{Finnhub}
 
   def start_link(stock, api_config) do
     GenServer.start_link(__MODULE__, {stock, api_config})

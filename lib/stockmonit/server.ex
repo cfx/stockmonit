@@ -1,8 +1,8 @@
 defmodule Stockmonit.Server do
   use GenServer
 
-  def start_link(config_filename) do
-    GenServer.start_link(__MODULE__, config_filename, name: __MODULE__)
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, :no_args, name: __MODULE__)
   end
 
   def get_data() do
@@ -21,13 +21,13 @@ defmodule Stockmonit.Server do
     {:noreply, Map.put(data, key, val)}
   end
 
-  def handle_info(:monitor_stocks, config = %{"stocks" => stocks, "config" => api_config}) do
+  def handle_info(:monitor_stocks, %{"stocks" => stocks, "config" => api_config}) do
     stocks |> Enum.each(&Stockmonit.StockSupervisor.add_stock(&1, api_config))
     {:noreply, %{}}
   end
 
-  def init(config_filename) do
-    case Stockmonit.Config.load(config_filename) do
+  def init(:no_args) do
+    case Stockmonit.Config.load() do
       {:error, msg} ->
         {:stop, msg}
 

@@ -1,5 +1,5 @@
 defmodule Stockmonit.Api.Mock do
-  def fetch(_symbol, api_key) do
+  def fetch(_symbol, _api_key) do
     mock = %{
       "c" => rand_n(),
       "h" => rand_n(),

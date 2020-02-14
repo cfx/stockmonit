@@ -1,29 +1,29 @@
 defmodule Stockmonit.Config do
   @moduledoc """
-  Documentation for `Stockmonit`.
+  Loads and parses .stockmonit.json file.
   """
 
-  def load(filename) do
-    config =
-      filename
-      |> config_path()
-      |> File.read()
+  @filename ".stockmonit.json"
 
-    case config do
+  def load() do
+    case File.read(config_path()) do
       {:ok, body} ->
         body
         |> Poison.decode()
         |> handle_json_decode()
 
       {:error, _} ->
-        {:error, "Can't load #{filename}"}
+        {:error, "Can't load #{@filename}"}
     end
   end
 
-  defp handle_json_decode({:error, _}), do: {:error, "Invalid config file"}
+  defp handle_json_decode({:error, _}) do
+    {:error, "Invalid #{@filename}"}
+  end
+
   defp handle_json_decode(res), do: res
 
-  defp config_path(filename) do
-    System.user_home() <> "/#{filename}"
+  defp config_path() do
+    System.user_home() <> "/#{@filename}"
   end
 end

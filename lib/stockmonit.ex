@@ -1,6 +1,4 @@
 defmodule Stockmonit do
-  @config_filename ".stockmonit.json"
-
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,21 +6,10 @@ defmodule Stockmonit do
   use Application
 
   def start(_type, _args) do
-    runtime_opts = [
-      app: Stockmonit.View,
-      shutdown: {:application, :stockmonit}
-    ]
-
-    children = [
-      Stockmonit.StockSupervisor,
-      {Stockmonit.Server, @config_filename},
-      {Ratatouille.Runtime.Supervisor, runtime: runtime_opts}
-    ]
-
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_all, name: Stockmonit.Supervisor]
-    Supervisor.start_link(children, opts)
+
+    Application.get_env(:stockmonit, :children)
+    |> Supervisor.start_link(opts)
   end
 
   def stop(_state) do
