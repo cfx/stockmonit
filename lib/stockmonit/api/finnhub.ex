@@ -19,6 +19,10 @@ defmodule Stockmonit.Api.Finnhub do
     {:error, "API error: status: #{sc} , '#{body}'"}
   end
 
+  def handle_response({:error, %HTTPoison.Error{id: nil, reason: :timeout}}) do
+    {:error, "API error: timeout"}
+  end
+
   defp map(obj) do
     %{
       "c" => current_price,
