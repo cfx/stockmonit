@@ -21,10 +21,10 @@ defmodule Stockmonit.StockWorker do
 
     case Finnhub.fetch(symbol, api_key) do
       {:ok, data} ->
-        Stockmonit.Server.put_data(key, data)
+        Stockmonit.Results.put(key, data)
 
       {:error, err} ->
-        Stockmonit.Server.put_data(key, %{"error" => err})
+        Stockmonit.Results.put(key, %{"error" => err})
     end
 
     fetch_stock(interval * 1000)

@@ -10,7 +10,7 @@ defmodule Stockmonit.View do
   def update(model, msg) do
     case msg do
       :check_stocks ->
-        Stockmonit.Server.get_data()
+        Stockmonit.Results.get()
 
       _ ->
         model

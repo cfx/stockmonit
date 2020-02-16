@@ -1,29 +1,31 @@
 defmodule Stockmonit.Config do
-  @moduledoc """
-  Loads and parses .stockmonit.json file.
-  """
+  use GenServer
 
-  @filename ".stockmonit.json"
+  def init(:no_args) do
+    case config_reader().read() do
+      {:error, msg} ->
+        {:stop, msg}
 
-  def load() do
-    case File.read(config_path()) do
-      {:ok, body} ->
-        body
-        |> Poison.decode()
-        |> handle_json_decode()
-
-      {:error, _} ->
-        {:error, "Can't load #{@filename}"}
+      data ->
+        Process.send_after(self(), :init_stocks, 0)
+        data
     end
   end
 
-  defp handle_json_decode({:error, _}) do
-    {:error, "Invalid #{@filename}"}
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, :no_args, name: __MODULE__)
   end
 
-  defp handle_json_decode(res), do: res
+  def get(), do: GenServer.call(__MODULE__, :get)
+  def handle_call(:get, _from, config), do: {:reply, config, config}
 
-  defp config_path() do
-    System.user_home() <> "/#{@filename}"
+  def handle_info(:init_stocks, config) do
+    %{"stocks" => stocks, "config" => api_config} = config
+    stocks |> Enum.each(&Stockmonit.StocksSupervisor.add_stock(&1, api_config))
+    {:noreply, config}
+  end
+
+  defp config_reader() do
+    Application.get_env(:stockmonit, :config_reader)
   end
 end

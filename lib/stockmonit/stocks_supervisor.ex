@@ -1,4 +1,4 @@
-defmodule Stockmonit.StockSupervisor do
+defmodule Stockmonit.StocksSupervisor do
   use DynamicSupervisor
 
   alias Stockmonit.StockWorker
