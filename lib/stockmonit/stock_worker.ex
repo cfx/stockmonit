@@ -1,6 +1,8 @@
 defmodule Stockmonit.StockWorker do
   use GenServer
-  alias Stockmonit.Api.{Finnhub}
+  alias Stockmonit.{Provider, Results}
+
+  #  import :timer, only: [sleep: 1]
 
   def start_link(stock, api_config) do
     GenServer.start_link(__MODULE__, {stock, api_config})
@@ -11,31 +13,40 @@ defmodule Stockmonit.StockWorker do
   end
 
   def init(config) do
-    fetch_stock(Enum.random(0..9) * 1000)
+    fetch(Enum.random(0..9) * 1000)
     {:ok, config}
   end
 
-  def handle_info(:fetch, {stock, api_config}) do
-    %{"name" => key, "symbol" => symbol} = stock
-    %{"api_key" => api_key, "interval" => interval} = api_config
+  def handle_info(:fetch, {stock, providers}) do
+    case Provider.find(providers, stock.api) do
+      nil ->
+        {:stop, "provider not found"}
 
-    case Finnhub.fetch(symbol, api_key) do
-      {:ok, data} ->
-        Stockmonit.Results.put(key, data)
-
-      {:error, err} ->
-        Stockmonit.Results.put(key, %{"error" => err})
+      provider ->
+        update_results(stock, provider)
+        fetch(provider.interval * 1000)
     end
 
-    fetch_stock(interval * 1000)
-    {:noreply, {stock, api_config}}
+    {:noreply, {stock, providers}}
   end
 
   def handle_call(:get, _from, config) do
     {:replay, config, config}
   end
 
-  defp fetch_stock(t) do
+  def update_results(stock, provider) do
+    api = Provider.to_atom(provider.name)
+
+    case api.fetch(stock.symbol, provider.api_key) do
+      {:ok, data} ->
+        Results.put(stock.name, data)
+
+      {:error, err} ->
+        Results.put(stock.name, %{"error" => err})
+    end
+  end
+
+  defp fetch(t) do
     Process.send_after(self(), :fetch, t)
   end
 end

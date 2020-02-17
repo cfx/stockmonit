@@ -1,3 +1,3 @@
 ExUnit.start()
 
-Mox.defmock(Stockmonit.ConfigMock, for: Stockmonit.Config.Reader)
+Mox.defmock(Stockmonit.ConfigServerMock, for: Stockmonit.ConfigReader)

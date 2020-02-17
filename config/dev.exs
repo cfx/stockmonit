@@ -3,7 +3,7 @@ use Mix.Config
 config :stockmonit, :children, [
   Stockmonit.Results,
   Stockmonit.StocksSupervisor,
-  Stockmonit.Config,
+  Stockmonit.ConfigServer,
   {Ratatouille.Runtime.Supervisor,
    runtime: [
      app: Stockmonit.View,
@@ -11,4 +11,4 @@ config :stockmonit, :children, [
    ]}
 ]
 
-config :stockmonit, :config_reader, Stockmonit.Config.File
+config :stockmonit, :config_reader, Stockmonit.ConfigFile
