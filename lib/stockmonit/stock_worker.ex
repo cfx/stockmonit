@@ -38,7 +38,7 @@ defmodule Stockmonit.StockWorker do
   def update_results(stock, provider) do
     api = Provider.to_atom(provider.name)
 
-    case api.fetch(stock.symbol, provider.api_key) do
+    case api.fetch(stock.symbol, provider.api_key, http_client()) do
       {:ok, data} ->
         Results.put(stock.name, data)
 
@@ -49,5 +49,9 @@ defmodule Stockmonit.StockWorker do
 
   defp fetch(t) do
     Process.send_after(self(), :fetch, t)
+  end
+
+  defp http_client() do
+    Application.get_env(:stockmonit, :http_client)
   end
 end

@@ -12,3 +12,4 @@ config :stockmonit, :children, [
 ]
 
 config :stockmonit, :config_reader, Stockmonit.ConfigFile
+config :stockmonit, :http_client, Stockmonit.DefaultHttpClient
