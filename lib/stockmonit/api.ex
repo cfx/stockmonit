@@ -1,5 +1,9 @@
 defmodule Stockmonit.Api do
-  def decode_response({:ok, body}, map_fn) do
+  @moduledoc false
+  @callback fetch(String.t(), String.t(), Stockmonit.HttpClient) ::
+              {:ok, Stockmonit.Quote.t()} | {:error, String.t()}
+
+  def decode_json_response({:ok, body}, map_fn) do
     case Poison.decode(body) do
       {:ok, data} ->
         {:ok, map_fn.(data)}
@@ -9,5 +13,5 @@ defmodule Stockmonit.Api do
     end
   end
 
-  def decode_response(res = {:error, _}, _map_fn), do: res
+  def decode_json_response(res = {:error, _}, _map_fn), do: res
 end

@@ -12,6 +12,7 @@ defmodule Stockmonit do
     |> Supervisor.start_link(opts)
   end
 
+  @spec stop(term) :: no_return
   def stop(_state) do
     System.halt()
   end

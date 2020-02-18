@@ -26,24 +26,24 @@ defmodule Stockmonit.StockWorker do
       provider ->
         update_results(stock, provider)
         fetch(provider.interval * 1000)
-    end
 
-    {:noreply, {stock, providers}}
+        {:noreply, {stock, providers}}
+    end
   end
 
   def handle_call(:get, _from, config) do
-    {:replay, config, config}
+    {:reply, config, config}
   end
 
   def update_results(stock, provider) do
     api = Provider.to_atom(provider.name)
 
     case api.fetch(stock.symbol, provider.api_key, http_client()) do
-      {:ok, data} ->
-        Results.put(stock.name, data)
+      {:ok, stock_quote} ->
+        Results.put(stock.name, {:ok, stock_quote})
 
       {:error, err} ->
-        Results.put(stock.name, %{"error" => err})
+        Results.put(stock.name, {:error, err})
     end
   end
 
