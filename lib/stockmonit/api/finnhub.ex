@@ -2,33 +2,21 @@ defmodule Stockmonit.Api.Finnhub do
   def fetch(symbol, api_key, http_client) do
     url(symbol, api_key)
     |> http_client.get()
-    |> decode_response
+    |> Stockmonit.Api.decode_response(&map/1)
   end
 
   defp url(stock_symbol, token) do
     "https://finnhub.io/api/v1/quote?symbol=#{stock_symbol}&token=#{token}"
   end
 
-  defp decode_response({:ok, body}) do
-    case Poison.decode(body) do
-      {:ok, data} ->
-        {:ok, map(data)}
-
-      {:error, _} ->
-        {:error, "Can't decode response body"}
-    end
-  end
-
-  defp decode_response(res = {:error, _}), do: res
-
-  defp map(obj) do
+  defp map(res) do
     %{
       "c" => current_price,
       "o" => open_price,
       "h" => high_price,
       "l" => low_price,
       "pc" => close_price
-    } = obj
+    } = res
 
     %{
       "current_price" => current_price,
