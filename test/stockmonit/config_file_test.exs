@@ -4,20 +4,18 @@ defmodule Stockmonit.ConfigFileTest do
   alias Stockmonit.{ConfigFile, Config}
   alias Config.{Stock, Provider}
 
-  @base_path Path.join([File.cwd!(), "test", "fixtures"])
-
   test "returns an error when config file cannot be found" do
-    path = Path.join(@base_path, "non_existing_file")
+    path = Path.join(TestHelper.fixtures_dir(), "non_existing_file")
     assert ConfigFile.read(path) == {:error, "Can't load config file"}
   end
 
   test "returns an error when config file is invalid json" do
-    path = Path.join(@base_path, "invalid_stockmonit.json")
+    path = Path.join(TestHelper.fixtures_dir(), "invalid_stockmonit.json")
     assert ConfigFile.read(path) == {:error, "Invalid config file"}
   end
 
   test "returns %Config when config file is valid" do
-    path = Path.join(@base_path, "valid_stockmonit.json")
+    path = Path.join(TestHelper.fixtures_dir(), "valid_stockmonit.json")
 
     expected = %Config{
       stocks: [

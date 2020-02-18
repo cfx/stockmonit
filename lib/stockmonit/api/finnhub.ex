@@ -7,7 +7,7 @@ defmodule Stockmonit.Api.Finnhub do
 
   def fetch(symbol, api_key, http_client) do
     url(symbol, api_key)
-    |> http_client.get()
+    |> http_client.get(%{})
     |> Api.decode_json_response(&map/1)
   end
 
