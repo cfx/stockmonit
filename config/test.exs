@@ -1,6 +1,5 @@
 use Mix.Config
 
-config :stockmonit, :children, [
-  Stockmonit.StockSupervisor,
-  Stockmonit.Server
-]
+config :stockmonit, :children, []
+config :stockmonit, :config_reader, Stockmonit.ConfigServerMock
+config :stockmonit, :http_client, Stockmonit.HttpClientMock

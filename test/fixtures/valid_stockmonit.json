@@ -1,0 +1,17 @@
+{
+    "providers": [
+	{
+	    "name": "Finnhub",
+	    "api_key": "secret",
+	    "interval": 60
+	}
+    ],
+
+    "stocks": [
+	{
+	    "name": "Nokia",
+	    "symbol": "NOK",
+	    "api": "Finnhub"
+	}
+    ]
+}

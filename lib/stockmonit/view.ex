@@ -10,7 +10,7 @@ defmodule Stockmonit.View do
   def update(model, msg) do
     case msg do
       :check_stocks ->
-        Stockmonit.Server.get_data()
+        Stockmonit.Results.get()
 
       _ ->
         model
@@ -39,7 +39,7 @@ defmodule Stockmonit.View do
     end
   end
 
-  defp print_row(name, %{"error" => err}) do
+  defp print_row(name, {:error, err}) do
     row do
       column(size: 5) do
         label(content: "#{name}")
@@ -51,30 +51,30 @@ defmodule Stockmonit.View do
     end
   end
 
-  defp print_row(name, data) do
+  defp print_row(name, {:ok, stock_quote}) do
     row do
       column(size: 5) do
         label(content: "#{name}")
       end
 
       column(size: 5) do
-        label(content: "#{data["current_price"]}")
+        label(content: "#{stock_quote.current_price}")
       end
 
       column(size: 5) do
-        label(content: "#{data["close_price"]}")
+        label(content: "#{stock_quote.close_price}")
       end
 
       column(size: 5) do
-        label(content: "#{data["open_price"]}")
+        label(content: "#{stock_quote.open_price}")
       end
 
       column(size: 5) do
-        label(content: "#{data["low_price"]}")
+        label(content: "#{stock_quote.low_price}")
       end
 
       column(size: 5) do
-        label(content: "#{data["high_price"]}")
+        label(content: "#{stock_quote.high_price}")
       end
     end
   end

@@ -1,4 +1,4 @@
-defmodule Stockmonit.StockSupervisor do
+defmodule Stockmonit.StocksSupervisor do
   use DynamicSupervisor
 
   alias Stockmonit.StockWorker
@@ -11,10 +11,10 @@ defmodule Stockmonit.StockSupervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  def add_stock(stock, config) do
+  def add_stock(stock, providers) do
     child_spec = %{
       id: StockWorker,
-      start: {StockWorker, :start_link, [stock, config]}
+      start: {StockWorker, :start_link, [stock, providers]}
     }
 
     {:ok, _pid} = DynamicSupervisor.start_child(__MODULE__, child_spec)

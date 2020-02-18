@@ -1,43 +1,35 @@
 defmodule Stockmonit.Api.Finnhub do
-  def fetch(symbol, api_key) do
+  alias Stockmonit.{Api, Quote}
+  @behaviour Api
+
+  @spec fetch(String.t(), String.t(), term) ::
+          {:ok, Quote.t()} | {:error, String.t()}
+
+  def fetch(symbol, api_key, http_client) do
     url(symbol, api_key)
-    |> HTTPoison.get()
-    |> handle_response
+    |> http_client.get(%{})
+    |> Api.decode_json_response(&map/1)
   end
 
   defp url(stock_symbol, token) do
     "https://finnhub.io/api/v1/quote?symbol=#{stock_symbol}&token=#{token}"
   end
 
-  def handle_response({:ok, %{status_code: 200, body: body}}) do
-    case Poison.decode(body) do
-      {:ok, obj} -> {:ok, map(obj)}
-    end
-  end
-
-  def handle_response({_, %{status_code: sc, body: body}}) do
-    {:error, "API error: status: #{sc} , '#{body}'"}
-  end
-
-  def handle_response({:error, %HTTPoison.Error{id: nil, reason: :timeout}}) do
-    {:error, "API error: timeout"}
-  end
-
-  defp map(obj) do
+  defp map(res) do
     %{
       "c" => current_price,
       "o" => open_price,
       "h" => high_price,
       "l" => low_price,
       "pc" => close_price
-    } = obj
+    } = res
 
-    %{
-      "current_price" => current_price,
-      "close_price" => close_price,
-      "open_price" => open_price,
-      "low_price" => low_price,
-      "high_price" => high_price
+    %Quote{
+      current_price: current_price,
+      close_price: close_price,
+      open_price: open_price,
+      low_price: low_price,
+      high_price: high_price
     }
   end
 end
