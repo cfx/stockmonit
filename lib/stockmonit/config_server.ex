@@ -1,8 +1,8 @@
 defmodule Stockmonit.ConfigServer do
   use GenServer
 
-  def init(:no_args) do
-    case config_reader().read() do
+  def init(path) do
+    case config_reader().read(path) do
       {:error, msg} ->
         {:stop, msg}
 
@@ -12,8 +12,8 @@ defmodule Stockmonit.ConfigServer do
     end
   end
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, :no_args, name: __MODULE__)
+  def start_link(path) do
+    GenServer.start_link(__MODULE__, path, name: __MODULE__)
   end
 
   def get(), do: GenServer.call(__MODULE__, :get)
@@ -21,7 +21,7 @@ defmodule Stockmonit.ConfigServer do
 
   def handle_info(:init_stocks, config) do
     %Stockmonit.Config{stocks: stocks, providers: providers} = config
-    stocks |> Enum.each(&Stockmonit.StocksSupervisor.add_stock(&1, providers))
+    Enum.each(stocks, &Stockmonit.StocksSupervisor.add_stock(&1, providers))
     {:noreply, config}
   end
 

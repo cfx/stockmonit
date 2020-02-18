@@ -12,9 +12,9 @@ defmodule Stockmonit.ConfigServerTest do
 
   test "stops process when config file returns an error" do
     Process.flag(:trap_exit, true)
-    expect(ConfigServerMock, :read, fn -> {:error, "boom"} end)
+    expect(ConfigServerMock, :read, fn _path -> {:error, "boom"} end)
 
-    assert {:error, "boom"} = ConfigServer.start_link(:no_args)
+    assert {:error, "boom"} = ConfigServer.start_link("/path/to/config/file")
   end
 
   describe "get()" do
@@ -30,8 +30,8 @@ defmodule Stockmonit.ConfigServerTest do
         ]
       }
 
-      expect(ConfigServerMock, :read, fn -> {:ok, cfg} end)
-      start_supervised(ConfigServer)
+      expect(ConfigServerMock, :read, fn _path -> {:ok, cfg} end)
+      start_supervised({ConfigServer, "/path/to/config/file"})
       assert ConfigServer.get() == cfg
     end
   end
