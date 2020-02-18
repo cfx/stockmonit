@@ -1,5 +1,5 @@
 defmodule Stockmonit.Config do
-  alias Stockmonit.{Stock, Provider}
+  alias Stockmonit.Config.{Stock, Provider}
   defstruct stocks: [], providers: []
 
   @type t :: %Stockmonit.Config{

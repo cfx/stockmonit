@@ -1,7 +1,8 @@
 defmodule Stockmonit.ConfigFileTest do
   use ExUnit.Case
   doctest Stockmonit.ConfigFile
-  alias Stockmonit.{ConfigFile, Config, Stock, Provider}
+  alias Stockmonit.{ConfigFile, Config}
+  alias Config.{Stock, Provider}
 
   @base_path Path.join([File.cwd!(), "test", "fixtures"])
 

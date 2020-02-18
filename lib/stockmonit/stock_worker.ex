@@ -1,6 +1,7 @@
 defmodule Stockmonit.StockWorker do
   use GenServer
-  alias Stockmonit.{Provider, Results}
+  alias Stockmonit.Config.{Provider}
+  alias Stockmonit.Results
 
   #  import :timer, only: [sleep: 1]
 

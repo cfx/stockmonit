@@ -5,7 +5,8 @@ defmodule Stockmonit.ConfigFile do
   """
   @behaviour Stockmonit.ConfigReader
 
-  alias Stockmonit.{Config, Stock, Provider}
+  alias Stockmonit.Config
+  alias Config.{Stock, Provider}
 
   def read(path) do
     case File.read(path) do
@@ -55,11 +56,11 @@ defmodule Stockmonit.ConfigFile do
       {:ok,
        %Stockmonit.Config{
          providers: [
-           %Stockmonit.Provider{api_key: "secret", interval: 60, name: "Finnhub"}
+           %Stockmonit.Config.Provider{api_key: "secret", interval: 60, name: "Finnhub"}
          ],
          stocks: [
-           %Stockmonit.Stock{api: "Finnhub", name: "Foo", symbol: "FOO"},
-           %Stockmonit.Stock{api: "NotImplemented", name: "Bar", symbol: "BAR"}
+           %Stockmonit.Config.Stock{api: "Finnhub", name: "Foo", symbol: "FOO"},
+           %Stockmonit.Config.Stock{api: "NotImplemented", name: "Bar", symbol: "BAR"}
          ]
       }}
   '''

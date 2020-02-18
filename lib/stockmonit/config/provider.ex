@@ -1,8 +1,8 @@
-defmodule Stockmonit.Provider do
+defmodule Stockmonit.Config.Provider do
   defstruct [:name, :api_key, :interval]
-  alias Stockmonit.Provider
+  alias Stockmonit.Config.Provider
 
-  @type t :: %Stockmonit.Provider{
+  @type t :: %Stockmonit.Config.Provider{
           name: String.t(),
           api_key: String.t(),
           interval: integer
@@ -13,10 +13,10 @@ defmodule Stockmonit.Provider do
 
   ## Examples
 
-      iex> Stockmonit.Provider.implemented("NotImplemented")
+      iex> Stockmonit.Config.Provider.implemented("NotImplemented")
       {:error, :nofile}
 
-      iex> Stockmonit.Provider.implemented("Finnhub")
+      iex> Stockmonit.Config.Provider.implemented("Finnhub")
       {:module, Stockmonit.Api.Finnhub}
   """
 
@@ -31,10 +31,10 @@ defmodule Stockmonit.Provider do
 
   ## Examples
 
-      iex> Stockmonit.Provider.find([%Stockmonit.Provider{name: "Finnhub"}], "Finnhub")
-      %Stockmonit.Provider{name: "Finnhub", api_key: nil, interval: nil}
+      iex> Stockmonit.Config.Provider.find([%Stockmonit.Config.Provider{name: "Finnhub"}], "Finnhub")
+      %Stockmonit.Config.Provider{name: "Finnhub", api_key: nil, interval: nil}
 
-      iex> Stockmonit.Provider.find([%Stockmonit.Provider{name: "Foobar"}], "Finnhub")
+      iex> Stockmonit.Config.Provider.find([%Stockmonit.Config.Provider{name: "Foobar"}], "Finnhub")
       nil
   """
 

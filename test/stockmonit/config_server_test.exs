@@ -1,7 +1,7 @@
 defmodule Stockmonit.ConfigServerTest do
   use ExUnit.Case
   doctest Stockmonit.ConfigServer
-  alias Stockmonit.{ConfigServer, ConfigServerMock, Config, Provider}
+  alias Stockmonit.{ConfigServer, ConfigServerMock, Config}
 
   #  import :timer, only: [sleep: 1]
 
@@ -22,7 +22,7 @@ defmodule Stockmonit.ConfigServerTest do
       cfg = %Config{
         stocks: [],
         providers: [
-          %Provider{
+          %Config.Provider{
             name: "Mock",
             api_key: "secret",
             interval: 0
