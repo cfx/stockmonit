@@ -19,7 +19,7 @@ defmodule Stockmonit.ConfigFile do
 
   @doc ~S'''
   Creates %Config struct from json file. Every api which is
-  not implemented in Stockmonit.Api.<ProviderModule> is removed
+  not implemented in Stockmonit.Api.<ProviderModule> is being removed.
 
   ## Examples
       iex> json = """
