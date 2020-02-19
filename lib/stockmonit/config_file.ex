@@ -3,11 +3,12 @@ defmodule Stockmonit.ConfigFile do
   Reads config file from $HOME/.stockmonit.json and
   converts it into %Stockmonit.Config struct
   """
-  @behaviour Stockmonit.ConfigReader
-
-  alias Stockmonit.Config
+  alias Stockmonit.{Config, ConfigReader}
   alias Config.{Stock, Provider}
 
+  @behaviour ConfigReader
+
+  @impl ConfigReader
   def read(path) do
     case File.read(path) do
       {:ok, body} ->
@@ -65,6 +66,7 @@ defmodule Stockmonit.ConfigFile do
       }}
   '''
 
+  @spec create_from_json(String.t()) :: ConfigReader.t()
   def create_from_json(json_str) do
     case Poison.decode(json_str) do
       {:ok, data} ->
@@ -73,7 +75,9 @@ defmodule Stockmonit.ConfigFile do
           providers:
             data["providers"]
             |> to_struct(Provider)
-            |> sanitize_providers
+            |> Enum.filter(fn %Provider{name: name} ->
+              Provider.implemented?(name)
+            end)
         }
 
         {:ok, config}
@@ -92,14 +96,5 @@ defmodule Stockmonit.ConfigFile do
 
       struct(model, obj)
     end)
-  end
-
-  defp sanitize_providers([]), do: []
-
-  defp sanitize_providers([p = %Provider{name: name} | providers]) do
-    case Provider.implemented(name) do
-      {:error, _} -> sanitize_providers(providers)
-      _ -> [p | sanitize_providers(providers)]
-    end
   end
 end

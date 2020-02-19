@@ -13,17 +13,24 @@ defmodule Stockmonit.Config.Provider do
 
   ## Examples
 
-      iex> Stockmonit.Config.Provider.implemented("NotImplemented")
-      {:error, :nofile}
+      iex> Stockmonit.Config.Provider.implemented?("NotImplemented")
+      false
 
-      iex> Stockmonit.Config.Provider.implemented("Finnhub")
-      {:module, Stockmonit.Api.Finnhub}
+      iex> Stockmonit.Config.Provider.implemented?("Finnhub")
+      true
   """
 
-  def implemented(name) do
-    name
-    |> to_atom()
-    |> Code.ensure_compiled()
+  @spec implemented?(String.t()) :: bool
+  def implemented?(name) do
+    res =
+      name
+      |> to_atom()
+      |> Code.ensure_compiled()
+
+    case res do
+      {:error, _} -> false
+      _ -> true
+    end
   end
 
   @doc """

@@ -1,7 +1,7 @@
 defmodule Stockmonit.Config.Stock do
   defstruct [:name, :symbol, :api]
 
-  @type t :: %Stockmonit.Config.Stock{
+  @type t :: %__MODULE__{
           name: String.t(),
           symbol: String.t(),
           api: String.t()

@@ -35,7 +35,7 @@ defmodule Stockmonit.StockWorker do
     {:reply, config, config}
   end
 
-  def update_results(stock, provider) do
+  defp update_results(stock, provider) do
     api = Provider.to_atom(provider.name)
 
     case Api.fetch(stock.symbol, provider.api_key, api, http_client()) do
