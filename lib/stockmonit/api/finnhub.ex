@@ -2,18 +2,17 @@ defmodule Stockmonit.Api.Finnhub do
   alias Stockmonit.{Api, Quote}
   @behaviour Api
 
-  @spec fetch(String.t(), String.t(), term) ::
-          {:ok, Quote.t()} | {:error, String.t()}
-
-  def fetch(symbol, api_key, http_client) do
-    url(symbol, api_key)
-    |> http_client.get(%{})
-    |> Api.decode_json_response(&map/1)
-  end
-
-  defp url(stock_symbol, token) do
+  @impl Api
+  def url(stock_symbol, token) do
     "https://finnhub.io/api/v1/quote?symbol=#{stock_symbol}&token=#{token}"
   end
+
+  @impl Api
+  def handler({:ok, body}) do
+    Api.decode_json_response(body, &map/1)
+  end
+
+  def handler(err), do: err
 
   defp map(res) do
     %{

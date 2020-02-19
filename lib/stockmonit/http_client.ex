@@ -1,11 +1,9 @@
 defmodule Stockmonit.HttpClient do
   @moduledoc false
 
-  defmodule Stockmonit.HttpClient.Response do
-    @type t ::
-            {:ok, %{status_code: integer(), body: String.t()}}
-            | {:error, String.t()}
-  end
+  @type url :: String.t()
+  @type body :: String.t()
+  @type response :: {:ok, body} | {:error, String.t()}
 
-  @callback get(String.t(), %{}) :: Stockmonit.HttpClient.Response.t()
+  @callback get(url, %{}) :: response
 end

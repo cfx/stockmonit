@@ -2,7 +2,7 @@ defmodule Stockmonit.Config.Provider do
   defstruct [:name, :api_key, :interval]
   alias Stockmonit.Config.Provider
 
-  @type t :: %Stockmonit.Config.Provider{
+  @type t :: %__MODULE__{
           name: String.t(),
           api_key: String.t(),
           interval: integer
@@ -38,6 +38,7 @@ defmodule Stockmonit.Config.Provider do
       nil
   """
 
+  @spec find([Provider.t()], String.t()) :: Provider.t() | nil
   def find([], _provider_name), do: nil
 
   def find([provider = %Provider{name: name} | _], provider_name)

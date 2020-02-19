@@ -7,7 +7,7 @@ defmodule Stockmonit.Quote do
     :high_price
   ]
 
-  @type t :: %Stockmonit.Quote{
+  @type t :: %__MODULE__{
           current_price: float(),
           open_price: float(),
           close_price: float(),

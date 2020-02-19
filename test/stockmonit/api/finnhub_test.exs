@@ -1,8 +1,8 @@
 defmodule Stockmonit.Api.FinnhubTest do
   use ExUnit.Case
   doctest Stockmonit.Api.Finnhub
-  alias Stockmonit.Api.Finnhub
-  alias Stockmonit.{Quote, HttpClientMock}
+  alias Stockmonit.{Api, Quote, HttpClientMock}
+  alias Api.Finnhub
 
   import Mox
   setup :set_mox_global
@@ -30,7 +30,7 @@ defmodule Stockmonit.Api.FinnhubTest do
       high_price: 14
     }
 
-    assert Finnhub.fetch("NOK", "secret", HttpClientMock) == {:ok, expected}
+    assert Api.fetch("NOK", "secret", Finnhub, HttpClientMock) == {:ok, expected}
   end
 
   test "returns error message on error" do
@@ -40,7 +40,7 @@ defmodule Stockmonit.Api.FinnhubTest do
       {:error, err}
     end)
 
-    assert Finnhub.fetch("NOK", "secret", HttpClientMock) == {:error, err}
+    assert Api.fetch("NOK", "secret", Finnhub, HttpClientMock) == {:error, err}
   end
 
   test "returns error message on json error" do
@@ -50,6 +50,6 @@ defmodule Stockmonit.Api.FinnhubTest do
       {:ok, "]invalid-json"}
     end)
 
-    assert Finnhub.fetch("NOK", "secret", HttpClientMock) == {:error, err}
+    assert Api.fetch("NOK", "secret", Finnhub, HttpClientMock) == {:error, err}
   end
 end
