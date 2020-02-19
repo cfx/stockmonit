@@ -1,7 +1,7 @@
 defmodule Stockmonit.StockWorker do
   use GenServer
   alias Stockmonit.Config.{Provider}
-  alias Stockmonit.Results
+  alias Stockmonit.{Api, Results}
 
   #  import :timer, only: [sleep: 1]
 
@@ -35,10 +35,10 @@ defmodule Stockmonit.StockWorker do
     {:reply, config, config}
   end
 
-  def update_results(stock, provider) do
+  defp update_results(stock, provider) do
     api = Provider.to_atom(provider.name)
 
-    case api.fetch(stock.symbol, provider.api_key, http_client()) do
+    case Api.fetch(stock.symbol, provider.api_key, api, http_client()) do
       {:ok, stock_quote} ->
         Results.put(stock.name, {:ok, stock_quote})
 

@@ -1,9 +1,25 @@
 defmodule Stockmonit.Api do
-  @moduledoc false
-  @callback fetch(String.t(), String.t(), Stockmonit.HttpClient) ::
-              {:ok, Stockmonit.Quote.t()} | {:error, String.t()}
+  alias Stockmonit.{HttpClient, Quote}
 
-  def decode_json_response({:ok, body}, map_fn) do
+  @moduledoc false
+
+  @type stock_symbol :: String.t()
+  @type api_key :: String.t()
+  @type response :: {:ok, Quote.t()} | {:error, String.t()}
+
+  @callback url(stock_symbol, api_key) :: HttpClient.url()
+  @callback handler(HttpClient.response()) :: response
+
+  @spec fetch(stock_symbol, api_key, Stockmonit.Api, HttpClient) ::
+          response
+  def fetch(symbol, api_key, provider, http_client) do
+    provider.url(symbol, api_key)
+    |> http_client.get(%{})
+    |> provider.handler()
+  end
+
+  @spec decode_json_response(HttpClient.body(), fun()) :: response
+  def decode_json_response(body, map_fn) do
     case Poison.decode(body) do
       {:ok, data} ->
         {:ok, map_fn.(data)}
@@ -12,6 +28,4 @@ defmodule Stockmonit.Api do
         {:error, "Can't decode response body"}
     end
   end
-
-  def decode_json_response(res = {:error, _}, _map_fn), do: res
 end
