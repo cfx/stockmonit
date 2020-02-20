@@ -1,21 +1,21 @@
-defmodule Stockmonit.ConfigFileTest do
+defmodule Stockmonit.Config.FileTest do
   use ExUnit.Case
-  doctest Stockmonit.ConfigFile
-  alias Stockmonit.{ConfigFile, Config}
+  doctest Stockmonit.Config.File
+  alias Stockmonit.Config
   alias Config.{Stock, Provider}
 
   test "returns an error when config file cannot be found" do
-    path = Path.join(TestHelper.fixtures_dir(), "non_existing_file")
-    assert ConfigFile.read(path) == {:error, "Can't load config file"}
+    path = TestHelper.fixture("non_existing_file")
+    assert Config.File.read(path) == {:error, "Can't load config file"}
   end
 
   test "returns an error when config file is invalid json" do
-    path = Path.join(TestHelper.fixtures_dir(), "invalid_stockmonit.json")
-    assert ConfigFile.read(path) == {:error, "Invalid config file"}
+    path = TestHelper.fixture("invalid_stockmonit.json")
+    assert Config.File.read(path) == {:error, "Invalid config file"}
   end
 
   test "returns %Config when config file is valid" do
-    path = Path.join(TestHelper.fixtures_dir(), "valid_stockmonit.json")
+    path = TestHelper.fixture("valid_stockmonit.json")
 
     expected = %Config{
       stocks: [
@@ -34,6 +34,6 @@ defmodule Stockmonit.ConfigFileTest do
       ]
     }
 
-    assert ConfigFile.read(path) == {:ok, expected}
+    assert Config.File.read(path) == {:ok, expected}
   end
 end

@@ -14,7 +14,7 @@ defmodule Stockmonit.StockWorker do
   end
 
   def init(config) do
-    fetch(Enum.random(0..9) * 1000)
+    fetch(Enum.random(0..9) * base_interval())
     {:ok, config}
   end
 
@@ -25,7 +25,7 @@ defmodule Stockmonit.StockWorker do
 
       provider ->
         update_results(stock, provider)
-        fetch(provider.interval * 1000)
+        fetch(provider.interval * base_interval())
 
         {:noreply, {stock, providers}}
     end
@@ -53,5 +53,10 @@ defmodule Stockmonit.StockWorker do
 
   defp http_client() do
     Application.get_env(:stockmonit, :http_client)
+  end
+
+  @spec base_interval() :: integer()
+  defp base_interval() do
+    Application.get_env(:stockmonit, :api_fetch_interval)
   end
 end

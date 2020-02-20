@@ -1,4 +1,4 @@
-defmodule Stockmonit.ConfigServer do
+defmodule Stockmonit.Config.Server do
   use GenServer
 
   def init(path) do

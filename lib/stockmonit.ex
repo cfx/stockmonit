@@ -8,12 +8,27 @@ defmodule Stockmonit do
   def start(_type, _args) do
     opts = [strategy: :one_for_all, name: Stockmonit.Supervisor]
 
-    Application.get_env(:stockmonit, :children)
-    |> Supervisor.start_link(opts)
+    children = [
+      Stockmonit.Results,
+      Stockmonit.StocksSupervisor,
+      {Stockmonit.Config.Server, config_path()},
+      {Ratatouille.Runtime.Supervisor,
+       runtime: [
+         app: Stockmonit.View,
+         shutdown: {:application, :stockmonit}
+       ]}
+    ]
+
+    Supervisor.start_link(children, opts)
   end
 
   @spec stop(term) :: no_return
   def stop(_state) do
     System.halt()
+  end
+
+  @spec config_path() :: String.t()
+  defp config_path() do
+    System.user_home() |> Path.join("/.stockmonit.json")
   end
 end
