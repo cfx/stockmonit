@@ -1,3 +1,9 @@
+Application.load(:stockmonit)
+
+for app <- Application.spec(:stockmonit, :applications) do
+  Application.ensure_all_started(app)
+end
+
 ExUnit.start()
 
 defmodule TestHelper do
