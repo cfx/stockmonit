@@ -1,14 +1,14 @@
-defmodule Stockmonit.ConfigFile do
+defmodule Stockmonit.Config.File do
   @moduledoc """
   Reads config file from $HOME/.stockmonit.json and
   converts it into %Stockmonit.Config struct
   """
-  alias Stockmonit.{Config, ConfigReader}
+  alias Stockmonit.{Config}
   alias Config.{Stock, Provider}
 
-  @behaviour ConfigReader
+  @behaviour Config.Reader
 
-  @impl ConfigReader
+  @impl Config.Reader
   def read(path) do
     case File.read(path) do
       {:ok, body} ->
@@ -53,7 +53,7 @@ defmodule Stockmonit.ConfigFile do
       ...>   ]
       ...>}
       ...>"""
-      iex> Stockmonit.ConfigFile.create_from_json(json)
+      iex> Stockmonit.Config.File.create_from_json(json)
       {:ok,
        %Stockmonit.Config{
          providers: [
@@ -66,7 +66,7 @@ defmodule Stockmonit.ConfigFile do
       }}
   '''
 
-  @spec create_from_json(String.t()) :: ConfigReader.t()
+  @spec create_from_json(String.t()) :: Config.Reader.t()
   def create_from_json(json_str) do
     case Poison.decode(json_str) do
       {:ok, data} ->

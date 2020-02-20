@@ -1,7 +1,7 @@
-defmodule Stockmonit.ConfigServerTest do
+defmodule Stockmonit.Config.ServerTest do
   use ExUnit.Case
-  doctest Stockmonit.ConfigServer
-  alias Stockmonit.{ConfigServer, ConfigServerMock, Config}
+  doctest Stockmonit.Config.Server
+  alias Stockmonit.{ConfigServerMock, Config}
 
   #  import :timer, only: [sleep: 1]
 
@@ -14,7 +14,7 @@ defmodule Stockmonit.ConfigServerTest do
     Process.flag(:trap_exit, true)
     expect(ConfigServerMock, :read, fn _path -> {:error, "boom"} end)
 
-    assert {:error, "boom"} = ConfigServer.start_link("/path/to/config/file")
+    assert {:error, "boom"} = Config.Server.start_link("/path/to/config/file")
   end
 
   describe "get()" do
@@ -31,8 +31,8 @@ defmodule Stockmonit.ConfigServerTest do
       }
 
       expect(ConfigServerMock, :read, fn _path -> {:ok, cfg} end)
-      start_supervised({ConfigServer, "/path/to/config/file"})
-      assert ConfigServer.get() == cfg
+      start_supervised({Config.Server, "/path/to/config/file"})
+      assert Config.Server.get() == cfg
     end
   end
 end
