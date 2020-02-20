@@ -7,7 +7,9 @@ end
 ExUnit.start()
 
 defmodule TestHelper do
-  def fixtures_dir, do: Path.join([File.cwd!(), "test", "fixtures"])
+  def fixture(filename) do
+    Path.join([File.cwd!(), "test", "fixtures", filename])
+  end
 end
 
 Mox.defmock(Stockmonit.ConfigServerMock, for: Stockmonit.Config.Reader)

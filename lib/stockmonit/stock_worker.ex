@@ -14,7 +14,7 @@ defmodule Stockmonit.StockWorker do
   end
 
   def init(config) do
-    fetch(Enum.random(0..9) * 1000)
+    fetch(Enum.random(0..9) * base_interval())
     {:ok, config}
   end
 

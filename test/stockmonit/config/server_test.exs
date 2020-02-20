@@ -1,7 +1,7 @@
 defmodule Stockmonit.Config.ServerTest do
   use ExUnit.Case
   doctest Stockmonit.Config.Server
-  alias Stockmonit.{ConfigServerMock, Config}
+  alias Stockmonit.Config
 
   #  import :timer, only: [sleep: 1]
 
@@ -10,29 +10,11 @@ defmodule Stockmonit.Config.ServerTest do
   setup :set_mox_global
   setup :verify_on_exit!
 
-  test "stops process when config file returns an error" do
-    Process.flag(:trap_exit, true)
-    expect(ConfigServerMock, :read, fn _path -> {:error, "boom"} end)
-
-    assert {:error, "boom"} = Config.Server.start_link("/path/to/config/file")
-  end
-
-  describe "get()" do
-    test "returns config map taken from config reader" do
-      cfg = %Config{
-        stocks: [],
-        providers: [
-          %Config.Provider{
-            name: "Mock",
-            api_key: "secret",
-            interval: 0
-          }
-        ]
-      }
-
-      expect(ConfigServerMock, :read, fn _path -> {:ok, cfg} end)
-      start_supervised({Config.Server, "/path/to/config/file"})
-      assert Config.Server.get() == cfg
+  describe "When config file can't be found" do
+    test "stops process when config file returns an error" do
+      Process.flag(:trap_exit, true)
+      expected = {:error, "Can't load config file"}
+      assert ^expected = Config.Server.start_link("/invalid/path")
     end
   end
 end
