@@ -11,10 +11,10 @@ defmodule Stockmonit.StocksSupervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  def add_stock(stock, providers) do
+  def add_stock(stock) do
     child_spec = %{
       id: StockWorker,
-      start: {StockWorker, :start_link, [stock, providers]}
+      start: {StockWorker, :start_link, [stock]}
     }
 
     {:ok, _pid} = DynamicSupervisor.start_child(__MODULE__, child_spec)

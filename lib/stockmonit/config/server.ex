@@ -1,5 +1,6 @@
 defmodule Stockmonit.Config.Server do
   use GenServer
+  alias Stockmonit.Config
 
   def init(path) do
     case config_reader().read(path) do
@@ -17,11 +18,17 @@ defmodule Stockmonit.Config.Server do
   end
 
   def get(), do: GenServer.call(__MODULE__, :get)
+  def get_providers(), do: GenServer.call(__MODULE__, :get_providers)
+
   def handle_call(:get, _from, config), do: {:reply, config, config}
 
+  def handle_call(:get_providers, _from, cfg = %Config{providers: providers}) do
+    {:reply, providers, cfg}
+  end
+
   def handle_info(:init_stocks, config) do
-    %Stockmonit.Config{stocks: stocks, providers: providers} = config
-    Enum.each(stocks, &Stockmonit.StocksSupervisor.add_stock(&1, providers))
+    %Config{stocks: stocks} = config
+    Enum.each(stocks, &Stockmonit.StocksSupervisor.add_stock(&1))
     {:noreply, config}
   end
 

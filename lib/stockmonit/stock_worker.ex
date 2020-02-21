@@ -1,27 +1,28 @@
 defmodule Stockmonit.StockWorker do
   use GenServer
   alias Stockmonit.Config.{Provider}
-  alias Stockmonit.{Api, Results}
+  alias Stockmonit.{Api, Config, Results}
 
   @default_interval 60
 
-  #  import :timer, only: [sleep: 1]
-
-  def start_link(stock, api_config) do
-    GenServer.start_link(__MODULE__, {stock, api_config})
+  def start_link(stock) do
+    GenServer.start_link(__MODULE__, stock)
   end
 
   def get() do
     GenServer.call(__MODULE__, :get)
   end
 
-  def init(config) do
+  def init(stock) do
     fetch(Enum.random(0..9) * base_interval())
-    {:ok, config}
+    {:ok, stock}
   end
 
-  def handle_info(:fetch, config = {stock, providers}) do
-    provider = Provider.find(providers, stock.api)
+  def handle_info(:fetch, stock) do
+    provider =
+      Config.Server.get_providers()
+      |> Provider.find(stock.api)
+
     update_results(stock, provider)
 
     case provider do
@@ -32,11 +33,11 @@ defmodule Stockmonit.StockWorker do
         fetch(provider.interval * base_interval())
     end
 
-    {:noreply, config}
+    {:noreply, stock}
   end
 
-  def handle_call(:get, _from, config) do
-    {:reply, config, config}
+  def handle_call(:get, _from, stock) do
+    {:reply, stock, stock}
   end
 
   defp update_results(stock, nil) do
