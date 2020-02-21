@@ -3,6 +3,8 @@ defmodule Stockmonit.View do
   @headers ["Name", "Current", "Prev Close", "Open", "Low", "High"]
 
   import Ratatouille.View
+  import Stockmonit.View.Column
+
   alias Ratatouille.Runtime.Subscription
 
   def init(_context), do: %{}
@@ -66,23 +68,33 @@ defmodule Stockmonit.View do
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.current_price}")
+        label do
+          text(current_price_column(stock_quote.current_price, stock_quote.close_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.close_price}")
+        label do
+          text(price_column(stock_quote.close_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.open_price}")
+        label do
+          text(price_column(stock_quote.open_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.low_price}")
+        label do
+          text(price_column(stock_quote.low_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.high_price}")
+        label do
+          text(price_column(stock_quote.high_price))
+        end
       end
     end
   end
