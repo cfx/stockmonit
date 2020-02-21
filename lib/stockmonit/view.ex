@@ -46,7 +46,15 @@ defmodule Stockmonit.View do
       end
 
       column(size: 5) do
-        label(content: err)
+        label(content: err, color: :red)
+      end
+
+      column(size: 5) do
+        label(content: "")
+      end
+
+      column(size: 5) do
+        label(content: "")
       end
     end
   end
