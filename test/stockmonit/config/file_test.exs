@@ -23,6 +23,11 @@ defmodule Stockmonit.Config.FileTest do
           name: "Nokia",
           symbol: "NOK",
           api: "Finnhub"
+        },
+        %Config.Stock{
+          api: "Unknown",
+          name: "Foo",
+          symbol: "FOO"
         }
       ],
       providers: [

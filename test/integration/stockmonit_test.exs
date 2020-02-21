@@ -48,7 +48,7 @@ defmodule StockmonitTest do
     spawn(__MODULE__, :check_results, [self(), expected])
     |> send(:check)
 
-    assert_receive(:ok, 500)
+    assert_receive(:ok, 200)
   end
 
   describe "When there are no errors" do
@@ -67,6 +67,7 @@ defmodule StockmonitTest do
         {:ok, body}
       end)
 
+      # Quote results derived from API
       expected_state = %{
         "Nokia" =>
           {:ok,
@@ -76,15 +77,22 @@ defmodule StockmonitTest do
              open_price: 10,
              low_price: 11,
              high_price: 14
-           }}
+           }},
+        "Foo" => {:error, "Provider not found"}
       }
 
+      # Expected conifg created based on stockmonit.json
       expected_config = %Config{
         stocks: [
           %Config.Stock{
             api: "Finnhub",
             name: "Nokia",
             symbol: "NOK"
+          },
+          %Config.Stock{
+            api: "Unknown",
+            name: "Foo",
+            symbol: "FOO"
           }
         ],
         providers: [
@@ -101,12 +109,33 @@ defmodule StockmonitTest do
     end
   end
 
-  describe "When there are errors from Provider's API" do
+  describe "When there is API error" do
     test "store error message instead of Quote" do
-      err = {:error, "BOOM"}
-      expect(HttpClientMock, :get, fn _url, _opts -> err end)
+      expect(HttpClientMock, :get, fn _url, _opts ->
+        {:error, "BOOM"}
+      end)
 
-      assert_results(%{"Nokia" => err})
+      expected_state = %{
+        "Nokia" => {:error, "BOOM"},
+        "Foo" => {:error, "Provider not found"}
+      }
+
+      assert_results(expected_state)
+    end
+  end
+
+  describe "When API JSON response cannot be parsed" do
+    test "store error message instead of Quote" do
+      expect(HttpClientMock, :get, fn _url, _opts ->
+        {:ok, "\invalid json"}
+      end)
+
+      expected_state = %{
+        "Nokia" => {:error, "Can't decode response body"},
+        "Foo" => {:error, "Provider not found"}
+      }
+
+      assert_results(expected_state)
     end
   end
 end
