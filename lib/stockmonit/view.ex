@@ -66,24 +66,59 @@ defmodule Stockmonit.View do
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.current_price}")
+        label do
+          text(current_price_column(stock_quote.current_price, stock_quote.close_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.close_price}")
+        label do
+          text(price_column(stock_quote.close_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.open_price}")
+        label do
+          text(price_column(stock_quote.open_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.low_price}")
+        label do
+          text(price_column(stock_quote.low_price))
+        end
       end
 
       column(size: 5) do
-        label(content: "#{stock_quote.high_price}")
+        label do
+          text(price_column(stock_quote.high_price))
+        end
       end
     end
+  end
+
+  @spec price_column(float()) :: [content: String.t(), color: atom()]
+  def price_column(value) do
+    [content: to_str(value), color: :default]
+  end
+
+  @spec current_price_column(float(), float()) :: [content: String.t(), color: atom()]
+  def current_price_column(current_price, close_price)
+      when current_price > close_price do
+    [content: to_str(current_price), color: :green]
+  end
+
+  def current_price_column(current_price, close_price)
+      when current_price < close_price do
+    [content: to_str(current_price), color: :red]
+  end
+
+  def current_price_column(current_price, _), do: price_column(current_price)
+
+  @spec to_str(float()) :: String.t()
+  defp to_str(value) do
+    value
+    |> Float.round(2)
+    |> Float.to_string()
   end
 end
