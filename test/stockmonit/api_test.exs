@@ -1,7 +1,7 @@
 defmodule Stockmonit.ApiTest do
   use ExUnit.Case
   doctest Stockmonit.Api
-  alias Stockmonit.{Api, Quote, HttpClientMock}
+  alias Stockmonit.{Api, Quote}
 
   describe ".decode_json_response" do
     test "returns error when json is invalid" do
