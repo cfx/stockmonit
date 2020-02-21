@@ -3,6 +3,8 @@ defmodule Stockmonit.StockWorker do
   alias Stockmonit.Config.{Provider}
   alias Stockmonit.{Api, Results}
 
+  @default_interval 60
+
   #  import :timer, only: [sleep: 1]
 
   def start_link(stock, api_config) do
@@ -18,21 +20,27 @@ defmodule Stockmonit.StockWorker do
     {:ok, config}
   end
 
-  def handle_info(:fetch, {stock, providers}) do
-    case Provider.find(providers, stock.api) do
+  def handle_info(:fetch, config = {stock, providers}) do
+    provider = Provider.find(providers, stock.api)
+    update_results(stock, provider)
+
+    case provider do
       nil ->
-        {:stop, "provider not found"}
+        fetch(@default_interval * base_interval())
 
-      provider ->
-        update_results(stock, provider)
+      _ ->
         fetch(provider.interval * base_interval())
-
-        {:noreply, {stock, providers}}
     end
+
+    {:noreply, config}
   end
 
   def handle_call(:get, _from, config) do
     {:reply, config, config}
+  end
+
+  defp update_results(stock, nil) do
+    Results.put(stock.name, {:error, "Provider not found"})
   end
 
   defp update_results(stock, provider) do

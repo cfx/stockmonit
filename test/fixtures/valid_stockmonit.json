@@ -17,6 +17,11 @@
 	    "name": "Nokia",
 	    "symbol": "NOK",
 	    "api": "Finnhub"
+	},
+	{
+	    "name": "Foo",
+	    "symbol": "FOO",
+	    "api": "Unknown"
 	}
     ]
 }
