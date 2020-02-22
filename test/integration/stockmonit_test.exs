@@ -78,7 +78,7 @@ defmodule StockmonitTest do
              low_price: 11,
              high_price: 14
            }},
-        "Foo" => {:error, "Provider not found"}
+        "FOO" => {:error, "Provider Unknown not found"}
       }
 
       # Expected conifg created based on stockmonit.json
@@ -117,7 +117,7 @@ defmodule StockmonitTest do
 
       expected_state = %{
         "Nokia" => {:error, "BOOM"},
-        "Foo" => {:error, "Provider not found"}
+        "FOO" => {:error, "Provider Unknown not found"}
       }
 
       assert_results(expected_state)
@@ -132,7 +132,7 @@ defmodule StockmonitTest do
 
       expected_state = %{
         "Nokia" => {:error, "Can't decode response body"},
-        "Foo" => {:error, "Provider not found"}
+        "FOO" => {:error, "Provider Unknown not found"}
       }
 
       assert_results(expected_state)

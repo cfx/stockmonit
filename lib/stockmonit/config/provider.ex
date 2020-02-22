@@ -46,14 +46,12 @@ defmodule Stockmonit.Config.Provider do
   """
 
   @spec find([Provider.t()], String.t()) :: Provider.t() | nil
-  def find([], _provider_name), do: nil
-
-  def find([provider = %Provider{name: name} | _], provider_name)
-      when <<name::bitstring>> == provider_name do
-    provider
+  def find(providers, name) do
+    providers
+    |> Enum.find(fn provider ->
+      provider.name == name
+    end)
   end
-
-  def find([_ | t], provider_name), do: find(t, provider_name)
 
   def to_atom(name), do: String.to_atom("Elixir.Stockmonit.Api.#{name}")
 end
