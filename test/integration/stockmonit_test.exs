@@ -1,6 +1,6 @@
 defmodule StockmonitTest do
   use ExUnit.Case
-  alias Stockmonit.{HttpClientMock, Quote, Results, Config}
+  alias Stockmonit.{HttpClientMock, Quote, Results}
 
   import Mox
 
@@ -81,31 +81,7 @@ defmodule StockmonitTest do
         "FOO" => {:error, "Provider Unknown not found"}
       }
 
-      # Expected conifg created based on stockmonit.json
-      expected_config = %Config{
-        stocks: [
-          %Config.Stock{
-            api: "Finnhub",
-            name: "Nokia",
-            symbol: "NOK"
-          },
-          %Config.Stock{
-            api: "Unknown",
-            name: "Foo",
-            symbol: "FOO"
-          }
-        ],
-        providers: [
-          %Config.Provider{
-            name: "Finnhub",
-            api_key: "secret",
-            interval: 60
-          }
-        ]
-      }
-
       assert_results(expected_state)
-      assert Config.Server.get() == expected_config
     end
   end
 
