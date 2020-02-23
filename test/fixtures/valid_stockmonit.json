@@ -1,16 +1,14 @@
 {
-    "providers": [
-	{
-	    "name": "Finnhub",
+    "providers": {
+	"Finnhub": {
 	    "api_key": "secret",
 	    "interval": 60
 	},
-	{
-	    "name": "NotImplemented",
+	"NotImplemented": {
 	    "api_key": "secret",
 	    "interval": 60
 	}
-    ],
+    },
 
     "stocks": [
 	{

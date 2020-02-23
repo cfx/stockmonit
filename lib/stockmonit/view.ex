@@ -11,6 +11,9 @@ defmodule Stockmonit.View do
 
   def update(model, msg) do
     case msg do
+      {:event, %{ch: ?r}} ->
+        Stockmonit.Config.Server.stop()
+
       :check_stocks ->
         Stockmonit.Results.get()
 

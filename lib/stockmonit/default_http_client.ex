@@ -1,6 +1,7 @@
 defmodule Stockmonit.DefaultHttpClient do
   @behaviour Stockmonit.HttpClient
 
+  @impl Stockmonit.HttpClient
   def get(url, _opts \\ %{}) do
     url
     |> HTTPoison.get()

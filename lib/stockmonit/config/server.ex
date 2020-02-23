@@ -1,5 +1,11 @@
 defmodule Stockmonit.Config.Server do
+  @moduledoc """
+  Gets .stockmonit.json via Config.t() and starts
+  stock workers.
+  """
+
   use GenServer
+  alias Stockmonit.Config
 
   def init(path) do
     case config_reader().read(path) do
@@ -7,7 +13,7 @@ defmodule Stockmonit.Config.Server do
         {:stop, msg}
 
       data ->
-        Process.send_after(self(), :init_stocks, 0)
+        Process.send_after(self(), :start_workers, 0)
         data
     end
   end
@@ -16,15 +22,20 @@ defmodule Stockmonit.Config.Server do
     GenServer.start_link(__MODULE__, path, name: __MODULE__)
   end
 
-  def get(), do: GenServer.call(__MODULE__, :get)
-  def handle_call(:get, _from, config), do: {:reply, config, config}
+  def stop() do
+    GenServer.stop(__MODULE__, :normal)
+  end
 
-  def handle_info(:init_stocks, config) do
-    %Stockmonit.Config{stocks: stocks, providers: providers} = config
-    Enum.each(stocks, &Stockmonit.StocksSupervisor.add_stock(&1, providers))
+  def handle_info(:start_workers, config = %Config{stocks: stocks, providers: providers}) do
+    stocks
+    |> Enum.each(fn stock ->
+      Stockmonit.StocksSupervisor.add_stock(stock, providers[stock.api])
+    end)
+
     {:noreply, config}
   end
 
+  @spec config_reader() :: Config.Reader
   defp config_reader() do
     Application.get_env(:stockmonit, :config_reader)
   end

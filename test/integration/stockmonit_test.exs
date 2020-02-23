@@ -1,24 +1,11 @@
 defmodule StockmonitTest do
   use ExUnit.Case
-  alias Stockmonit.{HttpClientMock, Quote, Results, Config}
+  alias Stockmonit.{HttpClientMock, Quote, Results}
 
   import Mox
 
   setup :set_mox_global
   setup :verify_on_exit!
-
-  # def start_app do
-  #  path = TestHelper.fixtures_dir() |> Path.join("valid_stockmonit.json")
-  #  opts = [strategy: :one_for_all, name: Stockmonit.Supervisor]
-
-  #  children = [
-  #    Stockmonit.Results,
-  #    Stockmonit.StocksSupervisor,
-  #    {Stockmonit.Config.Server, path}
-  #  ]
-
-  #  Supervisor.start_link(children, opts)
-  # end
 
   setup do
     path = TestHelper.fixture("valid_stockmonit.json")
@@ -81,31 +68,7 @@ defmodule StockmonitTest do
         "Foo" => {:error, "Provider not found"}
       }
 
-      # Expected conifg created based on stockmonit.json
-      expected_config = %Config{
-        stocks: [
-          %Config.Stock{
-            api: "Finnhub",
-            name: "Nokia",
-            symbol: "NOK"
-          },
-          %Config.Stock{
-            api: "Unknown",
-            name: "Foo",
-            symbol: "FOO"
-          }
-        ],
-        providers: [
-          %Config.Provider{
-            name: "Finnhub",
-            api_key: "secret",
-            interval: 60
-          }
-        ]
-      }
-
       assert_results(expected_state)
-      assert Config.Server.get() == expected_config
     end
   end
 

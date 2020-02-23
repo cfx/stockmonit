@@ -20,6 +20,8 @@ defmodule Stockmonit.View.Column do
   def current_price_column(current_price, _), do: price_column(current_price)
 
   @spec to_str(float()) :: String.t()
+  defp to_str(0), do: "-"
+
   defp to_str(value) do
     value
     |> Float.floor(2)
