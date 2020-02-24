@@ -3,8 +3,6 @@ defmodule Stockmonit.StockWorker do
   alias Stockmonit.Config.{Provider}
   alias Stockmonit.{Api, HttpClient, Results}
 
-  @default_interval 60
-
   def start_link(stock, provider) do
     GenServer.start_link(__MODULE__, {stock, provider})
   end
@@ -16,10 +14,9 @@ defmodule Stockmonit.StockWorker do
   end
 
   @doc """
-  Fetches Quote periodically and stores it in Results.
-  If error occurs error message is also also stored.
+  Fetches Quote periodically from given provider and stores it in Results.
+  If error occurs error message is also stored.
   """
-
   def handle_info(:fetch, config = {stock, nil}) do
     Results.put(stock.name, {:error, "Provider not found"})
     {:noreply, config}

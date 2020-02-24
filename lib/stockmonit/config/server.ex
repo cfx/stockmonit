@@ -1,6 +1,6 @@
 defmodule Stockmonit.Config.Server do
   @moduledoc """
-  Gets .stockmonit.json via Config.t() and starts
+  Loads .stockmonit.json via Config.t() and starts
   stock workers.
   """
 

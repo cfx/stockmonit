@@ -4,8 +4,7 @@ defmodule Stockmonit.Api.Finnhub do
 
   @impl Api
   def url(stock_symbol, token) do
-    # "https://finnhub.io/api/v1/quote?symbol=#{stock_symbol}&token=#{token}"
-    "http://localhost:8000/finnhub"
+    "https://finnhub.io/api/v1/quote?symbol=#{stock_symbol}&token=#{token}"
   end
 
   @impl Api

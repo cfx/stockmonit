@@ -1,10 +1,20 @@
-defmodule Stockmonit.View.Column do
+defmodule Stockmonit.View.Presenter do
   @type t :: [content: String.t(), color: atom()]
+
+  @doc """
+  Rounds price to 2 decimal places and sets text color.
+  If price is equal 0, "-" string is returned.
+  """
 
   @spec price_column(float()) :: __MODULE__.t()
   def price_column(value) do
     [content: to_str(value), color: :default]
   end
+
+  @doc """
+  Sets text color for 'Current' column. If current price is
+  higher show price in green, lower in red, otherwise default.
+  """
 
   @spec current_price_column(float(), float()) :: __MODULE__.t()
   def current_price_column(current_price, close_price)

@@ -1,13 +1,13 @@
 defmodule Stockmonit.Config.File do
-  @moduledoc """
-  Reads config file from $HOME/.stockmonit.json and
-  converts it into %Stockmonit.Config struct
-  """
   alias Stockmonit.{Config}
   alias Config.{Stock, Provider}
 
   @behaviour Config.Reader
 
+  @doc """
+  Reads config file from $HOME/.stockmonit.json and
+  converts it into %Stockmonit.Config struct
+  """
   @impl Config.Reader
   def read(path) do
     case File.read(path) do
