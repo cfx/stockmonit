@@ -1,7 +1,7 @@
 .PHONY: install test run docs
 
 install:
-	mix deps.get
+	mix local.rebar --force && mix local.hex --force && mix deps.get
 
 test:
 	mix test && mix dialyzer
