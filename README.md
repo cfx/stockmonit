@@ -27,12 +27,12 @@ $ make run
 
 ## Usage - keys
 
-`q` - quit
-`r` - reload all stocks and refresh screen
+`q` - quit.<br/>
+`r` - reload all stocks and refresh screen.
 
 ## Adding other stocks APIs
 
-Currently `Finnhub` is the only API provider implemented. Adding different providers: should be fairly easy - every API adapter needs to be implemented as a`Stockmonit.Api.<ProviderName>` module and has to satisfy `Stockmonit.Api` behavior:
+Currently `Finnhub` is the only API provider implemented. Adding different providers should be fairly easy - every API adapter needs to be implemented as a`Stockmonit.Api.<ProviderName>` module and has to satisfy `Stockmonit.Api` behavior:
 
 ```elixir
   ...
