@@ -15,7 +15,7 @@ defmodule Stockmonit.StockWorker do
 
   @doc """
   Fetches Quote periodically from given provider and stores it in Results.
-  If error occurs error message is also stored.
+  If error occurs error message is also stored. Interval is defined per provider.
   """
   def handle_info(:fetch, config = {stock, nil}) do
     Results.put(stock.name, {:error, "Provider not found"})

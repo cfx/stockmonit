@@ -28,7 +28,7 @@ defmodule Stockmonit.View do
 
   def render(model) do
     view do
-      panel title: "Stockmonit #{Stockmonit.MixProject.version()}", height: :fill do
+      panel title: "Stockmonit", height: :fill do
         row do
           for header <- @header do
             column(size: 1) do
