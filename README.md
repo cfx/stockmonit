@@ -30,7 +30,7 @@ $ make run
 `q` - quit.<br/>
 `r` - reload all stocks and refresh screen.
 
-## Adding other stocks APIs
+## Adding other APIs
 
 Currently `Finnhub` is the only API provider implemented. Adding different providers should be fairly easy - every API adapter needs to be implemented as a`Stockmonit.Api.<ProviderName>` module and has to satisfy `Stockmonit.Api` behavior:
 
@@ -51,4 +51,4 @@ See [Finnhub](https://github.com/cfx/stockmonit/blob/master/lib/stockmonit/api/f
 
 ## TODO
 - improve TUI
-- auto updates based on .stockmonit.json changes
+- auto updates based on .stockmonit.json changes.

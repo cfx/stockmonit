@@ -1,6 +1,6 @@
 defmodule Stockmonit.View do
   @behaviour Ratatouille.App
-  @header ["Name", "Current", "Prev Close", "Open", "Low", "High"]
+  @header ["Name", "Now", "Prev", "Open", "Low", "High"]
 
   import Ratatouille.View
   import Stockmonit.View.Presenter
@@ -28,37 +28,39 @@ defmodule Stockmonit.View do
 
   def render(model) do
     view do
-      row do
-        for header <- @header do
-          column(size: 5) do
-            label do
-              text(content: "#{header}", color: :yellow)
+      panel title: "Stockmonit #{Stockmonit.MixProject.version()}", height: :fill do
+        row do
+          for header <- @header do
+            column(size: 1) do
+              label do
+                text(content: "#{header}", color: :yellow)
+              end
             end
           end
         end
-      end
 
-      for {name, data} <- model do
-        print_row(name, data)
+        for {name, data} <- model do
+          print_row(name, data)
+        end
       end
     end
   end
 
   defp print_row(name, {:error, err}) do
     row do
-      column(size: 5) do
+      column(size: 2) do
         label(content: "#{name}")
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label(content: err, color: :red)
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label(content: "")
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label(content: "")
       end
     end
@@ -66,35 +68,35 @@ defmodule Stockmonit.View do
 
   defp print_row(name, {:ok, stock_quote}) do
     row do
-      column(size: 5) do
+      column(size: 1) do
         label(content: "#{name}")
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label do
           text(current_price_column(stock_quote.current_price, stock_quote.close_price))
         end
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label do
           text(price_column(stock_quote.close_price))
         end
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label do
           text(price_column(stock_quote.open_price))
         end
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label do
           text(price_column(stock_quote.low_price))
         end
       end
 
-      column(size: 5) do
+      column(size: 1) do
         label do
           text(price_column(stock_quote.high_price))
         end
