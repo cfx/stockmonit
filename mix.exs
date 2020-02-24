@@ -1,19 +1,19 @@
 defmodule Stockmonit.MixProject do
   use Mix.Project
 
-  def version, do: "0.1.0"
+  @version "0.1.0"
 
   def project do
     [
       app: :stockmonit,
-      version: version(),
+      version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
       package: package(),
       docs: [
-        source_ref: version(),
+        source_ref: @version,
         source_url: "https://github.com/cfx/stockmonit",
         main: "readme",
         extras: ["README.md"]

@@ -14,7 +14,7 @@ defmodule Stockmonit.DefaultHttpClient do
     {:error, "API error: status: #{sc} '#{body}'"}
   end
 
-  defp handle_response({:error, err = %HTTPoison.Error{id: nil, reason: reason}}) do
+  defp handle_response({:error, %HTTPoison.Error{id: nil, reason: reason}}) do
     {:error, "Error: #{inspect(reason)}"}
   end
 end
