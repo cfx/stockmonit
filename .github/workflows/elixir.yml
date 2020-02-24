@@ -1,0 +1,22 @@
+name: Elixir CI
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: elixir:1.10-slim
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Dependencies
+      run: |
+        mix local.rebar --force
+        mix local.hex --force
+        apt-get update -qqq && apt-get install make gcc python -y -qqq
+        mix deps.get
+    - name: Run Tests
+      run: mix test --cover

@@ -1,6 +1,5 @@
 defmodule Stockmonit.Config.Provider do
   defstruct [:api_key, :interval]
-  alias Stockmonit.Config.Provider
 
   @type t :: %__MODULE__{
           api_key: String.t(),
