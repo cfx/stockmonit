@@ -1,4 +1,4 @@
-.PHONY: install test run
+.PHONY: install test run docs
 
 install:
 	mix deps.get
@@ -8,3 +8,6 @@ test:
 
 run:
 	elixir --sname stockmonit -S mix run --no-halt
+
+docs:
+	mix docs

@@ -1,4 +1,9 @@
 defmodule Stockmonit.Api.Finnhub do
+  @moduledoc """
+  API GET Quote client for Finnhub API.
+  See https://finnhub.io/docs/api#quote
+  """
+
   alias Stockmonit.{Api, Quote}
   @behaviour Api
 

@@ -5,6 +5,8 @@
 Stockmonit is a simple app for monitoring stock prices in your terminal.
 It depends on [termbox](https://github.com/nsf/termbox) and [ratatouille](https://hexdocs.pm/ratatouille).
 
+![](stockmonit.png)
+
 ## Installation
 
 ```code
@@ -30,25 +32,27 @@ $ make run
 `q` - quit.<br/>
 `r` - reload all stocks and refresh screen.
 
-## Adding other stocks APIs
+## Adding other APIs
 
 Currently `Finnhub` is the only API provider implemented. Adding different providers should be fairly easy - every API adapter needs to be implemented as a`Stockmonit.Api.<ProviderName>` module and has to satisfy `Stockmonit.Api` behavior:
 
 ```elixir
-  ...
-
-  @type stock_symbol :: String.t()
-  @type api_key :: String.t()
   @type response :: {:ok, Quote.t()} | {:error, String.t()}
 
-  @callback url(stock_symbol, api_key) :: HttpClient.url()
+  @callback url(Stock.symbol(), Stock.api_key()) :: HttpClient.url()
   @callback handler(HttpClient.response()) :: response
-
-  ...
 ```
 
 See [Finnhub](https://github.com/cfx/stockmonit/blob/master/lib/stockmonit/api/finnhub.ex) module as an example.
 
+## Documentation
+
+Generate docs locally via ex_doc:
+```code
+$ make docs
+```
+
 ## TODO
 - improve TUI
-- auto updates based on .stockmonit.json changes
+- auto updates based on .stockmonit.json changes.
+- custom interval per stock
