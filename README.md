@@ -20,8 +20,7 @@ $ make test
 
 ## Running Stockmonit
 
-Make sure you have valid .stockmonit.json in your `$HOME` directory and `Finnhub`
-account configured (or any other API for stocks implemented and configured, see below).
+Make sure you have valid `.stockmonit.json` in your `$HOME` directory and [Finnhub](https://finnhub.io) account configured (or any other stocks API implemented, see below).
 
 ```code
 $ make run
@@ -34,7 +33,7 @@ $ make run
 
 ## Adding other APIs
 
-Currently `Finnhub` is the only API provider implemented. Adding different providers should be fairly easy - every API adapter needs to be implemented as a`Stockmonit.Api.<ProviderName>` module and has to satisfy `Stockmonit.Api` behavior:
+Currently `Finnhub` is the only API provider implemented. Adding different providers should be easy - every API adapter needs to be implemented as a`Stockmonit.Api.<ProviderName>` module and has to satisfy `Stockmonit.Api` behavior:
 
 ```elixir
   @type response :: {:ok, Quote.t()} | {:error, String.t()}
