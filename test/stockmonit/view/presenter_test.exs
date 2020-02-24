@@ -8,8 +8,8 @@ defmodule Stockmonit.View.PresenterTest do
       assert Presenter.price_column(12.3456) == [content: "12.34", color: :default]
     end
 
-    test "returns '-' when value is 0" do
-      assert Presenter.price_column(0) == [content: "-", color: :default]
+    test "works with integers" do
+      assert Presenter.price_column(12) == [content: "12", color: :default]
     end
   end
 
