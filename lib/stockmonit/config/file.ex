@@ -1,13 +1,13 @@
 defmodule Stockmonit.Config.File do
-  @moduledoc """
-  Reads config file from $HOME/.stockmonit.json and
-  converts it into %Stockmonit.Config struct
-  """
   alias Stockmonit.{Config}
   alias Config.{Stock, Provider}
 
   @behaviour Config.Reader
 
+  @doc """
+  Reads config file from $HOME/.stockmonit.json and
+  converts it into %Stockmonit.Config struct
+  """
   @impl Config.Reader
   def read(path) do
     case File.read(path) do
@@ -26,18 +26,16 @@ defmodule Stockmonit.Config.File do
   ## Examples
       iex> json = """
       ...>{
-      ...>   "providers": [
-      ...>       {
-      ...>           "name": "Finnhub",
+      ...>   "providers": {
+      ...>       "Finnhub": {
       ...>           "api_key": "secret",
       ...>           "interval": 60
       ...>       },
-      ...>       {
-      ...>           "name": "NotImplemented",
+      ...>       "NotImplemented": {
       ...>           "api_key": "secret",
       ...>           "interval": 60
       ...>       }
-      ...>   ],
+      ...>   },
       ...>
       ...>   "stocks": [
       ...>       {
@@ -56,9 +54,9 @@ defmodule Stockmonit.Config.File do
       iex> Stockmonit.Config.File.create_from_json(json)
       {:ok,
        %Stockmonit.Config{
-         providers: [
-           %Stockmonit.Config.Provider{api_key: "secret", interval: 60, name: "Finnhub"}
-         ],
+         providers: %{
+           "Finnhub" => %Stockmonit.Config.Provider{api_key: "secret", interval: 60}
+         },
          stocks: [
            %Stockmonit.Config.Stock{api: "Finnhub", name: "Foo", symbol: "FOO"},
            %Stockmonit.Config.Stock{api: "NotImplemented", name: "Bar", symbol: "BAR"}
@@ -74,9 +72,14 @@ defmodule Stockmonit.Config.File do
           stocks: data["stocks"] |> to_struct(Stock),
           providers:
             data["providers"]
-            |> to_struct(Provider)
-            |> Enum.filter(fn %Provider{name: name} ->
-              Provider.implemented?(name)
+            |> Enum.reduce(%{}, fn {k, %{"api_key" => api_key, "interval" => interval}}, acc ->
+              case Provider.implemented?(k) do
+                true ->
+                  Map.put(acc, k, %Provider{api_key: api_key, interval: interval})
+
+                _ ->
+                  acc
+              end
             end)
         }
 
@@ -87,6 +90,7 @@ defmodule Stockmonit.Config.File do
     end
   end
 
+  @spec to_struct([%{}], atom()) :: any()
   defp to_struct(col, model) do
     Enum.map(col, fn el ->
       obj =

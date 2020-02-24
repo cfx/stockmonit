@@ -30,13 +30,9 @@ defmodule Stockmonit.Config.FileTest do
           symbol: "FOO"
         }
       ],
-      providers: [
-        %Provider{
-          name: "Finnhub",
-          api_key: "secret",
-          interval: 60
-        }
-      ]
+      providers: %{
+        "Finnhub" => %Provider{api_key: "secret", interval: 60}
+      }
     }
 
     assert Config.File.read(path) == {:ok, expected}

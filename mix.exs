@@ -8,7 +8,8 @@ defmodule Stockmonit.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      package: package()
     ]
   end
 
@@ -36,6 +37,14 @@ defmodule Stockmonit.MixProject do
   defp aliases do
     [
       test: "test --no-start"
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Józef Chraplewski"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/cfx/stockmonit"}
     ]
   end
 end

@@ -1,9 +1,9 @@
 defmodule Stockmonit.View do
   @behaviour Ratatouille.App
-  @headers ["Name", "Current", "Prev Close", "Open", "Low", "High"]
+  @header ["Name", "Current", "Prev Close", "Open", "Low", "High"]
 
   import Ratatouille.View
-  import Stockmonit.View.Column
+  import Stockmonit.View.Presenter
 
   alias Ratatouille.Runtime.Subscription
 
@@ -11,6 +11,9 @@ defmodule Stockmonit.View do
 
   def update(model, msg) do
     case msg do
+      {:event, %{ch: ?r}} ->
+        Stockmonit.Config.Server.stop()
+
       :check_stocks ->
         Stockmonit.Results.get()
 
@@ -26,7 +29,7 @@ defmodule Stockmonit.View do
   def render(model) do
     view do
       row do
-        for header <- @headers do
+        for header <- @header do
           column(size: 5) do
             label do
               text(content: "#{header}", color: :yellow)

@@ -1,0 +1,41 @@
+{
+    "providers": {
+	"Finnhub": {
+	    "api_key": "secret",
+	    "interval": 60
+	}
+    },
+
+    "stocks": [
+	{
+	    "name": "Nokia",
+	    "symbol": "NOK",
+	    "api": "Finnhub"
+	},
+	{
+	    "name": "Microsoft",
+	    "symbol": "MSFT",
+	    "api": "Finnhub"
+	},
+	{
+	    "name": "Synopsys",
+	    "symbol": "SNPS",
+	    "api": "Finnhub"
+	},
+	{
+	    "name": "Cisco",
+	    "symbol": "CSCO",
+	    "api": "Finnhub"
+	},
+	{
+	    "name": "STMicroelec",
+	    "symbol": "STM",
+	    "api": "Finnhub"
+	},
+	{
+	    "name": "IBM",
+	    "symbol": "IBM",
+	    "api": "Finnhub"
+	}
+    ]
+}
