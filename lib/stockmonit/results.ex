@@ -1,25 +1,19 @@
 defmodule Stockmonit.Results do
-  use GenServer
-
-  def init(:no_args), do: {:ok, %{}}
+  use Agent
+  alias Stockmonit.Quote
 
   def start_link(_) do
-    GenServer.start_link(__MODULE__, :no_args, name: __MODULE__)
+    Agent.start_link(fn -> %{} end, name: __MODULE__)
+  end
+
+  @spec put(String.t(), {:ok, Quote.t()} | {:error, String.t()}) :: atom()
+  def put(key, val) do
+    Agent.update(__MODULE__, fn data ->
+      Map.put(data, key, val)
+    end)
   end
 
   def get() do
-    GenServer.call(__MODULE__, :get)
-  end
-
-  def put(key, val) do
-    GenServer.cast(__MODULE__, {:put, key, val})
-  end
-
-  def handle_call(:get, _from, data) do
-    {:reply, data, data}
-  end
-
-  def handle_cast({:put, key, val}, data) do
-    {:noreply, Map.put(data, key, val)}
+    Agent.get(__MODULE__, & &1)
   end
 end
