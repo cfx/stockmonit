@@ -1,6 +1,6 @@
 defmodule Stockmonit.View do
   @behaviour Ratatouille.App
-  @header ["Name", "Now", "Prev", "Open", "Low", "High"]
+  @header ["Name", "Now", "Prev", "Open", "Low", "High", "Change +/-"]
 
   import Ratatouille.View
   import Stockmonit.View.Presenter
@@ -99,6 +99,12 @@ defmodule Stockmonit.View do
       column(size: 1) do
         label do
           text(price_column(stock_quote.high_price))
+        end
+      end
+
+      column(size: 1) do
+        label do
+          text(change_column(stock_quote.change))
         end
       end
     end

@@ -10,32 +10,38 @@
 	{
 	    "name": "Nokia",
 	    "symbol": "NOK",
-	    "api": "Finnhub"
+	    "api": "Finnhub",
+	    "purchase_price": 4.8
 	},
 	{
 	    "name": "Microsoft",
 	    "symbol": "MSFT",
-	    "api": "Finnhub"
+	    "api": "Finnhub",
+	    "purchase_price": 4.8
 	},
 	{
 	    "name": "Synopsys",
 	    "symbol": "SNPS",
-	    "api": "Finnhub"
+	    "api": "Finnhub",
+	    "purchase_price": 4.8
 	},
 	{
 	    "name": "Cisco",
 	    "symbol": "CSCO",
-	    "api": "Finnhub"
+	    "api": "Finnhub",
+	    "purchase_price": 4.8
 	},
 	{
 	    "name": "STMicroelec",
 	    "symbol": "STM",
-	    "api": "Finnhub"
+	    "api": "Finnhub",
+	    "purchase_price": 4.8
 	},
 	{
 	    "name": "IBM",
 	    "symbol": "IBM",
-	    "api": "Finnhub"
+	    "api": "Finnhub",
+	    "purchase_price": 4.8
 	}
     ]
 }

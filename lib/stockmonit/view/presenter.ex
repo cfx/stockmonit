@@ -30,6 +30,23 @@ defmodule Stockmonit.View.Presenter do
 
   def current_price_column(current_price, _), do: price_column(current_price)
 
+  @doc """
+  Shows price change in percentage (compared to purchase_price defined
+  in stockmonit.json file
+  """
+  @spec change_column(Quote.price() | nil) :: column_props()
+  def change_column(val) when is_nil(val) or val == 0 do
+    [content: "-", color: :default]
+  end
+
+  def change_column(val) when val > 100 do
+    [content: to_str(val - 100), color: :green]
+  end
+
+  def change_column(val) when val < 100 do
+    [content: to_str(-1 * (100.0 - val)), color: :red]
+  end
+
   @spec to_str(Quote.price()) :: String.t()
   defp to_str(val) when is_integer(val), do: Integer.to_string(val)
 
