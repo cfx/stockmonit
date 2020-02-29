@@ -1,22 +1,22 @@
 defmodule Stockmonit.Api do
   alias Stockmonit.{HttpClient, Quote}
-  alias Stockmonit.Config.Stock
+  alias Stockmonit.Config.{Provider, Stock}
 
   @type response :: {:ok, Quote.t()} | {:error, String.t()}
 
-  @callback url(Stock.symbol(), Stock.api_key()) :: HttpClient.url()
-  @callback handler(HttpClient.response()) :: response
+  @callback url(Stock.symbol(), Provider.api_key()) :: HttpClient.url()
+  @callback handler(HttpClient.response(), Stock.t()) :: response
 
   @doc """
   Fetches quote via provider defined in Stockmonit.Api.<Provider>
   <Provider> has to implement Stockmonit.Api behaviour.
   """
-  @spec fetch(Stock.symbol(), Stock.api_key(), Stockmonit.Api, HttpClient) ::
+  @spec fetch(Stock.t(), Provider.api_key(), Stockmonit.Api, HttpClient) ::
           response
-  def fetch(symbol, api_key, provider, http_client) do
-    provider.url(symbol, api_key)
+  def fetch(stock, api_key, provider, http_client) do
+    provider.url(stock.symbol, api_key)
     |> http_client.get(%{})
-    |> provider.handler()
+    |> provider.handler(stock)
   end
 
   @spec decode_json_response(HttpClient.body(), fun()) :: response

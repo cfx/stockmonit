@@ -20,13 +20,12 @@ defmodule Stockmonit.Quote do
         }
 
   @doc """
-  Adds %Quote.change which reflects change between old and new price
+  Calculates new value comparing old and new price.
   """
-  @spec add_change(price(), price(), __MODULE__.t()) :: __MODULE__.t()
-  def add_change(nil, _new_price, q), do: q
-  def add_change(old_price, _new_price, q) when old_price <= 0, do: q
+  @spec calculate_change(price(), price()) :: price()
+  def calculate_change(old_price, _new_price) when old_price <= 0 or is_nil(old_price), do: nil
 
-  def add_change(old_price, new_price, q) do
-    Map.put(q, :change, new_price / old_price * 100)
+  def calculate_change(old_price, new_price) do
+    new_price / old_price * 100
   end
 end

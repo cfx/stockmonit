@@ -1,6 +1,6 @@
 defmodule Stockmonit.View do
   @behaviour Ratatouille.App
-  @header ["Name", "Now", "Prev", "Open", "Low", "High", "Change +/-"]
+  @header ["Name", "Now", "Prev", "Open", "Low", "High", "+/- %"]
 
   import Ratatouille.View
   import Stockmonit.View.Presenter

@@ -32,12 +32,12 @@ defmodule Stockmonit.View.PresenterTest do
 
   describe ".change_column()" do
     test "show drop in % in red color" do
-      expected = [content: "-25.0", color: :red]
+      expected = [content: "-25.0%", color: :red]
       assert Presenter.change_column(75.0) == expected
     end
 
     test "show growth in % in green color" do
-      expected = [content: "10.0", color: :green]
+      expected = [content: "10.0%", color: :green]
       assert Presenter.change_column(110.0) == expected
     end
 

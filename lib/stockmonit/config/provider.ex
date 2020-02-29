@@ -1,8 +1,9 @@
 defmodule Stockmonit.Config.Provider do
   defstruct [:api_key, :interval]
 
+  @type api_key :: String.t()
   @type t :: %__MODULE__{
-          api_key: String.t(),
+          api_key: api_key(),
           interval: integer
         }
 

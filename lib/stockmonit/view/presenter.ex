@@ -40,11 +40,11 @@ defmodule Stockmonit.View.Presenter do
   end
 
   def change_column(val) when val > 100 do
-    [content: to_str(val - 100), color: :green]
+    [content: to_str(val - 100) <> "%", color: :green]
   end
 
   def change_column(val) when val < 100 do
-    [content: to_str(-1 * (100.0 - val)), color: :red]
+    [content: to_str(-1 * (100.0 - val)) <> "%", color: :red]
   end
 
   @spec to_str(Quote.price()) :: String.t()

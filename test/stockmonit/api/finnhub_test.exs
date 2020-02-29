@@ -2,12 +2,17 @@ defmodule Stockmonit.Api.FinnhubTest do
   use ExUnit.Case
   doctest Stockmonit.Api.Finnhub
   alias Stockmonit.{Api, Quote, HttpClientMock}
+  alias Stockmonit.Config.Stock
   alias Api.Finnhub
 
   import Mox
   setup :set_mox_global
 
-  test "maps finnhub api json response to %Quote" do
+  setup do
+    [stock: %Stock{symbol: "NOK"}]
+  end
+
+  test "maps finnhub api json response to %Quote", %{stock: stock} do
     expect(HttpClientMock, :get, fn _url, _opts ->
       body = """
       {
@@ -30,26 +35,26 @@ defmodule Stockmonit.Api.FinnhubTest do
       high_price: 14
     }
 
-    assert Api.fetch("NOK", "secret", Finnhub, HttpClientMock) == {:ok, expected}
+    assert Api.fetch(stock, "secret", Finnhub, HttpClientMock) == {:ok, expected}
   end
 
-  test "returns error message on error" do
+  test "returns error message on error", %{stock: stock} do
     err = "boom"
 
     expect(HttpClientMock, :get, fn _url, _opts ->
       {:error, err}
     end)
 
-    assert Api.fetch("NOK", "secret", Finnhub, HttpClientMock) == {:error, err}
+    assert Api.fetch(stock, "secret", Finnhub, HttpClientMock) == {:error, err}
   end
 
-  test "returns error message on json error" do
+  test "returns error message on json error", %{stock: stock} do
     err = "Can't decode response body"
 
     expect(HttpClientMock, :get, fn _url, _opts ->
       {:ok, "]invalid-json"}
     end)
 
-    assert Api.fetch("NOK", "secret", Finnhub, HttpClientMock) == {:error, err}
+    assert Api.fetch(stock, "secret", Finnhub, HttpClientMock) == {:error, err}
   end
 end

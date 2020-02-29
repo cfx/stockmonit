@@ -25,7 +25,7 @@ defmodule Stockmonit.StockWorker do
   def handle_info(:fetch, config = {stock, provider}) do
     api = Provider.to_atom(stock.api)
 
-    case Api.fetch(stock.symbol, provider.api_key, api, http_client()) do
+    case Api.fetch(stock, provider.api_key, api, http_client()) do
       {:ok, stock_quote} ->
         Results.put(stock.name, {:ok, stock_quote})
 
