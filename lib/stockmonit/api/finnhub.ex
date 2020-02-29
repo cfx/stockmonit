@@ -5,6 +5,7 @@ defmodule Stockmonit.Api.Finnhub do
   """
 
   alias Stockmonit.{Api, Quote}
+  alias Stockmonit.Config.{Stock}
   @behaviour Api
 
   @impl Api
@@ -13,27 +14,26 @@ defmodule Stockmonit.Api.Finnhub do
   end
 
   @impl Api
-  def handler({:ok, body}) do
-    Api.decode_json_response(body, &map/1)
+  def handler({:ok, body}, %Stock{purchase_price: purchase_price}) do
+    Api.decode_json_response(body, fn res ->
+      %{
+        "c" => current_price,
+        "o" => open_price,
+        "h" => high_price,
+        "l" => low_price,
+        "pc" => close_price
+      } = res
+
+      %Quote{
+        current_price: current_price,
+        close_price: close_price,
+        open_price: open_price,
+        low_price: low_price,
+        high_price: high_price,
+        change: Quote.calculate_change(purchase_price, close_price)
+      }
+    end)
   end
 
-  def handler(err), do: err
-
-  defp map(res) do
-    %{
-      "c" => current_price,
-      "o" => open_price,
-      "h" => high_price,
-      "l" => low_price,
-      "pc" => close_price
-    } = res
-
-    %Quote{
-      current_price: current_price,
-      close_price: close_price,
-      open_price: open_price,
-      low_price: low_price,
-      high_price: high_price
-    }
-  end
+  def handler(err, _stock), do: err
 end

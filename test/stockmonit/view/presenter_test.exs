@@ -29,4 +29,26 @@ defmodule Stockmonit.View.PresenterTest do
       assert Presenter.current_price_column(13.0, 13.0) == expected
     end
   end
+
+  describe ".change_column()" do
+    test "show drop in % in red color" do
+      expected = [content: "-25.0%", color: :red]
+      assert Presenter.change_column(75.0) == expected
+    end
+
+    test "show growth in % in green color" do
+      expected = [content: "10.0%", color: :green]
+      assert Presenter.change_column(110.0) == expected
+    end
+
+    test "show '-' and default color when nil" do
+      expected = [content: "-", color: :default]
+      assert Presenter.change_column(nil) == expected
+    end
+
+    test "show '-' and default color when 0" do
+      expected = [content: "-", color: :default]
+      assert Presenter.change_column(0) == expected
+    end
+  end
 end
