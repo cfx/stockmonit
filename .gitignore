@@ -23,3 +23,5 @@ erl_crash.dump
 stockmonit-*.tar
 .#*
 
+# Ignore emacs elixir format file
+*emacs-elixir-format.exs

@@ -38,6 +38,20 @@ defmodule Stockmonit.Api.FinnhubTest do
     assert Api.fetch(stock, "secret", Finnhub, HttpClientMock) == {:ok, expected}
   end
 
+  test "handels an error from API", %{stock: stock} do
+    expect(HttpClientMock, :get, fn _url, _opts ->
+      body = """
+      {
+        "error": "boom"
+      }
+      """
+
+      {:ok, body}
+    end)
+
+    assert {:error, "boom"} = Api.fetch(stock, "secret", Finnhub, HttpClientMock)
+  end
+
   test "returns error message on error", %{stock: stock} do
     err = "boom"
 

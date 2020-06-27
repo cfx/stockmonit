@@ -32,7 +32,7 @@ defmodule Stockmonit.View.Presenter do
 
   @doc """
   Shows price change in percentage (compared to purchase_price defined
-  in stockmonit.json file
+  in stockmonit.json file).
   """
   @spec change_column(Quote.price() | nil) :: column_props()
   def change_column(val) when is_nil(val) or val == 0 do

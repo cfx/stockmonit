@@ -15,7 +15,7 @@ defmodule Stockmonit.ApiTest do
           %Quote{current_price: n * 10}
         end)
 
-      assert got == {:ok, %Quote{current_price: 50}}
+      assert got == %Quote{current_price: 50}
     end
   end
 end

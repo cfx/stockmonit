@@ -23,7 +23,7 @@ defmodule Stockmonit.Api do
   def decode_json_response(body, map_fn) do
     case Poison.decode(body) do
       {:ok, data} ->
-        {:ok, map_fn.(data)}
+        map_fn.(data)
 
       {:error, _} ->
         {:error, "Can't decode response body"}
